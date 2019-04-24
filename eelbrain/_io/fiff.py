@@ -19,8 +19,9 @@ from mne.io.kit.constants import KIT
 from mne.minimum_norm import prepare_inverse_operator, apply_inverse_raw
 
 from .. import _info
-from .._types import PathArg
 from .._data_obj import Factor, Var, NDVar, Dataset, Case, Sensor, Space, SourceSpace, VolumeSourceSpace, UTS, _matrix_graph
+from .._types import PathArg
+from .._utils import deprecated
 from .._info import BAD_CHANNELS
 from .._text import n_of
 from .._utils import ui
@@ -397,14 +398,12 @@ def epochs(ds, tmin=-0.1, tmax=None, baseline=None, decim=1, mult=1, proj=False,
 
     epochs_ = mne_epochs(ds, tmin, tmax, baseline, i_start, raw, decim=decim,
                          picks=picks, reject=reject, proj=proj, tstop=tstop)
-    ndvar = epochs_ndvar(epochs_, name, data, mult=mult, info=info,
-                         sensors=sensors, sysname=sysname)
-
     if len(epochs_) == 0:
         raise RuntimeError(f"No events left in {raw.filenames[0]}")
-    return ndvar
+    return epochs_ndvar(epochs_, name, data, mult=mult, info=info, sensors=sensors, sysname=sysname)
 
 
+@deprecated('0.31', "use ds['meg'] = load.fiff.epochs(ds, ...)")
 def add_epochs(ds, tmin=-0.1, tmax=0.6, baseline=None, decim=1, mult=1,
                proj=False, data=None, reject=None, exclude='bads', info=None,
                name="meg", raw=None, sensors=None, i_start='i_start',
@@ -495,6 +494,7 @@ def add_epochs(ds, tmin=-0.1, tmax=0.6, baseline=None, decim=1, mult=1,
     return ds
 
 
+@deprecated('0.31', "use ds['epochs'] = load.fiff.mne_epochs(ds, ...)")
 def add_mne_epochs(ds, tmin=-0.1, tmax=None, baseline=None, target='epochs',
                    **kwargs):
     """
