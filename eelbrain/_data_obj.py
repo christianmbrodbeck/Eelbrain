@@ -9496,7 +9496,7 @@ class SourceSpaceBase(Dimension):
                     f"mne.add_source_space_distances(src)\n"
                     f"src.save({path!r}, overwrite=True)")
             i = i0 + len(vertices)
-            dist[i0:i, i0:i] = ss['dist'][vertices, vertices[:, None]].toarray()
+            dist[i0:i, i0:i] = ss['dist'][vertices][:, vertices].toarray()
             i0 = i
         return dist
 
