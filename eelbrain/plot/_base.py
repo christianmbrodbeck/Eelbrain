@@ -1055,7 +1055,7 @@ class PlotData:
     def from_args(
             cls,
             y: Union[NDVarArg, Sequence[NDVarArg]],
-            dims: Union[int, Tuple[str, ...]],
+            dims: Union[int, Tuple[Optional[str], ...]],
             xax: CategorialArg = None,
             ds: Dataset = None,
             sub: IndexArg = None,
