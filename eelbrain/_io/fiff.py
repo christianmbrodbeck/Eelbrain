@@ -210,6 +210,8 @@ def events(raw=None, merge=None, proj=False, name=None, bads=None,
                     merge = -1
             evts = mne.find_stim_steps(raw, merge=merge, stim_channel=stim_channel)
             evts = evts[np.flatnonzero(evts[:, 2])]
+            if raw.event_id:
+                labels = {id_: label for label, id_ in raw.event_id.items()}
     else:
         evts = mne.read_events(events)
 
