@@ -676,6 +676,8 @@ class TTestIndependent(TTest):
         Tailedness of the p value.
     df : int
         Degrees of freedom.
+    full : FMText
+        Full description of the test result.
     """
     def __init__(
             self,
@@ -694,7 +696,7 @@ class TTestIndependent(TTest):
         n = len(y)
         df = n - 2
         groups = np.arange(n) < n1
-        d = y[groups].mean() - y[groups == False].mean()
+        d = y[groups].mean() - y[~groups].mean()
         groups.dtype = np.int8
         t = stats.t_ind(y.x[:, None], groups)[0]
 
@@ -703,6 +705,8 @@ class TTestIndependent(TTest):
         TTest.__init__(self, d, t, df, tail)
         self.c1_name = c1_name
         self.c0_name = c0_name
+        self._y1 = y1
+        self._y0 = y0
         self._two_y = c1 is None
 
     def __repr__(self):
@@ -712,6 +716,13 @@ class TTestIndependent(TTest):
         else:
             desc = f"{self._y} ~ {self._x}, {self.c1_name} {cmp} {self.c0_name}"
         return f"<{self.__class__.__name__}: {desc}; {self._asfmtext(difference=True)}>"
+
+    @LazyProperty
+    def full(self):
+        return fmtxt.FMText([
+            self.c1_name, ': ', fmtxt.eq('M', self._y1.mean()), ', ', fmtxt.eq('SD', self._y1.std()), '; ',
+            self.c0_name, ': ', fmtxt.eq('M', self._y0.mean()), ', ', fmtxt.eq('SD', self._y0.std()), '; ',
+            self._asfmtext()])
 
 
 class MannWhitneyU:

@@ -107,6 +107,7 @@ def test_ttest():
     t, p = scipy.stats.ttest_ind(ds[a1_index, 'fltvar'], ds[a2_index, 'fltvar'])
     assert res.t == pytest.approx(t, 10)
     assert res.p == pytest.approx(p, 10)
+    assert str(res.full) == 'a1: M = 1.00, SD = 1.02; a2: M = -0.20, SD = 1.05; t(78) = 5.10, p < .001'
 
     # TTestRelated
     res = test.TTestRelated('fltvar', 'A', 'a1', 'a2', 'rm', "B=='b1'", ds)
